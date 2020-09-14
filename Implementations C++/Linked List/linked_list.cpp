@@ -115,6 +115,35 @@ class linked_list {
         genType top_back() {
             return (genType) this->tail->key;
         }
+        bool find(genType key) {
+            if (is_empty())
+                return false;
+            node<genType>* current = this->head;
+            while (current != NULL) {
+                if (current->key == key)
+                    return true;
+                current = current->next;
+            }
+            return false;
+        }
+        void erase(genType key) {
+            if (!find(key)) {
+                cout << "Error - Key is not in the list\n";
+                return;
+            }
+            if (this->head->key == key) {
+                this->head = this->head->next;
+                if (this->head == NULL)
+                    this->tail = NULL;
+                return;
+            }
+            node<genType>* current = this->head;
+            while (current->next->key != key) {
+                current = current->next;
+            }
+            current->next = current->next->next;
+            this->size--;
+        }
         int get_size() {
             return this->size;
         }
@@ -134,24 +163,17 @@ class linked_list {
 
 int main() {
     linked_list<int> list;
-    list.print_list();
     for (int i = 0; i < 5; i++) {
         list.push_back(i + 1);
     }
-    list.print_list();
     for (int i = 5; i < 10; i++) {
         list.push_front(i + 1);
     }
     list.print_list();
     cout << to_string(list.top_front()) << '\n';
     cout << to_string(list.top_back()) << '\n';
-    for (int i = 0; i < 10; i++) {
-        if (i % 2 == 0) {
-            list.pop_back();
-        } else {
-            list.pop_front();
-        }
-        list.print_list();
-    }
+    cout << to_string(list.find(6)) << '\n';
+    list.erase(6);
+    list.print_list();
     return 0;
 }
