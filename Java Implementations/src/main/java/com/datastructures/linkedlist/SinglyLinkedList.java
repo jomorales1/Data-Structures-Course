@@ -135,13 +135,13 @@ public class SinglyLinkedList<T> {
     @Override
     public String toString() {
         if (isEmpty()) return "[]";
-        StringBuilder stringBuilder = new StringBuilder("[");
+        StringBuilder stringBuilder = new StringBuilder();
         Node<T> current = this.head;
         while (current.next != null) {
-            stringBuilder.append(current.key).append(" ");
+            stringBuilder.append("[").append(current.key).append("] -> ");
             current = current.next;
         }
-        stringBuilder.append(this.tail.key).append("]");
+        stringBuilder.append("[").append(this.tail.key).append("]");
         return stringBuilder.toString();
     }
 }
