@@ -27,7 +27,7 @@ class queue_a {
             return this->number_elements == 0;
         }
         void enqueue(genType key) {
-            if (mod(this->read - this->write, this->total_size) == 1) {
+            if (this->number_elements == this->total_size) {
                 cout << "Error - Queue is full\n";
                 return;
             }
