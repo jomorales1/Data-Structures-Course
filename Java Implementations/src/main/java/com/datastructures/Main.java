@@ -3,20 +3,18 @@ package com.datastructures;
 import com.datastructures.dynamicarray.DynamicArray;
 import com.datastructures.exception.ElementNotFoundException;
 import com.datastructures.exception.EmptyStructureException;
+import com.datastructures.exception.StructureSpaceLimitExceeded;
 import com.datastructures.linkedlist.DoublyLinkedList;
 import com.datastructures.linkedlist.SinglyLinkedList;
+import com.datastructures.queue.QueueA;
 import com.datastructures.stack.StackA;
 import com.datastructures.stack.StackLL;
 
 public class Main {
 
-    public static void main(String[] args) throws EmptyStructureException, ElementNotFoundException {
+    public static void main(String[] args) throws EmptyStructureException, ElementNotFoundException, StructureSpaceLimitExceeded {
         System.out.println("Hello World!");
-        testSinglyLinkedList();
-        testDoublyLinkedList();
-        testDynamicArray();
-        testStackA();
-        testStackLL();
+        testQueueA();
     }
 
     public static void testSinglyLinkedList() throws EmptyStructureException, ElementNotFoundException {
@@ -115,6 +113,20 @@ public class Main {
         for (int i = 0; i < 10; i++) {
             stack.pop();
             System.out.println(stack);
+        }
+    }
+
+    public static void testQueueA() throws EmptyStructureException, StructureSpaceLimitExceeded {
+        QueueA<Integer> queue = new QueueA<>(10);
+        System.out.println(queue);
+        for (int i = 0; i < 10; i++) {
+            queue.enqueue(i);
+            System.out.println(queue);
+        }
+        System.out.println(queue.peek());
+        for (int i = 0; i < 10; i++) {
+            queue.dequeue();
+            System.out.println(queue);
         }
     }
 }
