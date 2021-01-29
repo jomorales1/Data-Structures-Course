@@ -6,12 +6,12 @@ import com.datastructures.exception.StructureSpaceLimitExceeded;
 import java.util.Collections;
 import java.util.Vector;
 
-public class PriorityQueue<T extends Comparable<?super T>> {
+public class MaxPriorityQueue<T extends Comparable<?super T>> {
     private int size;
     private int maxSize;
     private Vector<T> elements;
     
-    public PriorityQueue(int maxSize) {
+    public MaxPriorityQueue(int maxSize) {
         this.size = 0;
         this.maxSize = maxSize;
         this.elements = new Vector<>(this.maxSize + 1);

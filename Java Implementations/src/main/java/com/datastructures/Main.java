@@ -6,7 +6,8 @@ import com.datastructures.exception.EmptyStructureException;
 import com.datastructures.exception.StructureSpaceLimitExceeded;
 import com.datastructures.linkedlist.DoublyLinkedList;
 import com.datastructures.linkedlist.SinglyLinkedList;
-import com.datastructures.priorityqueue.PriorityQueue;
+import com.datastructures.priorityqueue.MaxPriorityQueue;
+import com.datastructures.priorityqueue.MinPriorityQueue;
 import com.datastructures.queue.QueueA;
 import com.datastructures.queue.QueueLL;
 import com.datastructures.stack.StackA;
@@ -23,7 +24,8 @@ public class Main {
         testStackLL();
         testQueueA();
         testQueueLL();
-        testPriorityQueue();
+        testMaxPriorityQueue();
+        testMinPriorityQueue();
     }
 
     public static void testSinglyLinkedList() throws EmptyStructureException, ElementNotFoundException {
@@ -153,8 +155,8 @@ public class Main {
         }
     }
 
-    public static void testPriorityQueue() throws StructureSpaceLimitExceeded, EmptyStructureException {
-        PriorityQueue<Integer> queue = new PriorityQueue<>(20);
+    public static void testMaxPriorityQueue() throws StructureSpaceLimitExceeded, EmptyStructureException {
+        MaxPriorityQueue<Integer> queue = new MaxPriorityQueue<>(20);
         for (int i = 10; i >= 5; i--) {
             queue.insert(i - 5);
             queue.insert(i);
@@ -163,6 +165,19 @@ public class Main {
         queue.remove(3);
         System.out.print(queue.toString());
         System.out.println(queue.extractMax());
+        System.out.print(queue.toString());
+    }
+
+    public static void testMinPriorityQueue() throws StructureSpaceLimitExceeded, EmptyStructureException {
+        MinPriorityQueue<Integer> queue = new MinPriorityQueue<>(20);
+        for (int i = 10; i >= 5; i--) {
+            queue.insert(i - 5);
+            queue.insert(i);
+        }
+        System.out.print(queue.toString());
+        queue.remove(3);
+        System.out.print(queue.toString());
+        System.out.println(queue.extractMin());
         System.out.print(queue.toString());
     }
 }
