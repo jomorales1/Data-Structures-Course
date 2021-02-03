@@ -53,6 +53,18 @@ class max_priority_queue_t {
                 sift_down(index);
             }
         }
+        void heap_sort(genType *a, int n) {
+            build_heap(a, n);
+            for (int i = 0; i < n - 1; i++) {
+                swap(this->elements[1], this->elements[this->size]);
+                this->size--;
+                sift_down(1);
+            }
+            for (int i = 1; i <= this->max_size; i++) {
+                cout << this->elements[i] << ' ';
+            }
+            cout << '\n';
+        }
         string to_string_t() {
             string res = "[";
             for (int i = 1; i <= this->size; i++) {
@@ -96,6 +108,17 @@ class max_priority_queue_t {
             if (index != max_index) {
                 swap(this->elements[index], this->elements[max_index]);
                 sift_down(max_index);
+            }
+        }
+        void build_heap(genType *a, int n) {
+            this->max_size = n;
+            this->size = n;
+            this->elements = new genType[n + 1];
+            for (int i = 1; i <= n; i++) {
+                this->elements[i] = a[i - 1];
+            }
+            for (int i = n / 2; i >= 1; i--) {
+                sift_down(i);
             }
         }
 };
@@ -196,10 +219,6 @@ class min_priority_queue_t {
         }
 };
 
-void heap_sort(vector<int> &elements) {
-    
-}
-
 int main() {
     cout << "Max Priority Queue:\n";
     max_priority_queue_t<int, 20> queue;
@@ -223,5 +242,14 @@ int main() {
     cout << queue2.to_string_t();
     cout << to_string(queue2.extract_min()) << '\n';
     cout << queue2.to_string_t();
+    cout << "\nHeap Sort:\n";
+    int *a = new int[10];
+    cout << "Elements: ";
+    for (int i = 0; i < 10; i++) {
+        a[i] = 10 * rand();
+        cout << a[i] << ' ';
+    }
+    cout << "\nSorted: ";
+    queue.heap_sort(a, 10);
     return 0;
 }
