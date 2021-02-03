@@ -13,6 +13,9 @@ import com.datastructures.queue.QueueLL;
 import com.datastructures.stack.StackA;
 import com.datastructures.stack.StackLL;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class Main {
 
     public static void main(String[] args) throws EmptyStructureException, ElementNotFoundException, StructureSpaceLimitExceeded {
@@ -26,6 +29,7 @@ public class Main {
         testQueueLL();
         testMaxPriorityQueue();
         testMinPriorityQueue();
+        testHeapSort();
     }
 
     public static void testSinglyLinkedList() throws EmptyStructureException, ElementNotFoundException {
@@ -179,5 +183,15 @@ public class Main {
         System.out.print(queue.toString());
         System.out.println(queue.extractMin());
         System.out.print(queue.toString());
+    }
+
+    public static void testHeapSort() {
+        MaxPriorityQueue<Integer> queue = new MaxPriorityQueue<>(10);
+        ArrayList<Integer> a = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            a.add(random.nextInt(10) + 1);
+        }
+        queue.heapSort(a, 10);
     }
 }

@@ -4,6 +4,7 @@ import com.datastructures.exception.EmptyStructureException;
 import com.datastructures.exception.StructureSpaceLimitExceeded;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 
 public class MaxPriorityQueue<T extends Comparable<?super T>> {
@@ -16,6 +17,17 @@ public class MaxPriorityQueue<T extends Comparable<?super T>> {
         this.maxSize = maxSize;
         this.elements = new Vector<>(this.maxSize + 1);
         this.elements.add(null);
+    }
+
+    public MaxPriorityQueue(Iterable<T> a, int size) {
+        this.size = size;
+        this.maxSize = size;
+        this.elements = new Vector<>(this.maxSize + 1);
+        this.elements.add(null);
+        List<T> b = (List<T>) a;
+        for (int i = 0; i < size; i++) {
+            this.elements.add(b.get(i));
+        }
     }
 
     private int parent(int index) {
@@ -96,6 +108,33 @@ public class MaxPriorityQueue<T extends Comparable<?super T>> {
         } else {
             siftDown(index);
         }
+    }
+
+    private void buildHeap(Iterable<T> a, int size) {
+        this.maxSize = size;
+        this.size = size;
+        this.elements = new Vector<>(size + 1);
+        this.elements.add(null);
+        List<T> b = (List<T>) a;
+        for (int i = 0; i < size; i++) {
+            this.elements.add(b.get(i));
+        }
+        for (int i = size / 2; i >= 1; i--) {
+            siftDown(i);
+        }
+    }
+
+    public void heapSort(Iterable<T> a, int size) {
+        buildHeap(a, size);
+        for (int i = 0; i < size - 1; i++) {
+            Collections.swap(this.elements, 1, this.size);
+            this.size--;
+            siftDown(1);
+        }
+        for (int i = 1; i <= this.maxSize; i++) {
+            System.out.print(this.elements.get(i) + " ");
+        }
+        System.out.println();
     }
 
     public int getSize() {
