@@ -2,15 +2,16 @@
 
 using namespace std;
 
-template <int size = 10>
 class disjoint_set_t {
     private:
         int* parent;
         int* rank;
+        int size;
     public:
-        disjoint_set_t() {
+        disjoint_set_t(int size) {
             this->parent = new int[size];
             this->rank = new int[size];
+            this->size = size;
         }
         void make_set(int i) {
             if (i < 0 || i >= size) {
@@ -49,7 +50,7 @@ class disjoint_set_t {
 };
 
 int main() {
-    disjoint_set_t<10> dsu;
+    disjoint_set_t dsu(10);
     for (int i = 0; i < 10; i++) {
         dsu.make_set(i);
     }
