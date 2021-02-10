@@ -1,5 +1,6 @@
 package com.datastructures;
 
+import com.datastructures.disjointset.DisjointSet;
 import com.datastructures.dynamicarray.DynamicArray;
 import com.datastructures.exception.ElementNotFoundException;
 import com.datastructures.exception.EmptyStructureException;
@@ -30,6 +31,7 @@ public class Main {
         testMaxPriorityQueue();
         testMinPriorityQueue();
         testHeapSort();
+        testDisjointSet();
     }
 
     public static void testSinglyLinkedList() throws EmptyStructureException, ElementNotFoundException {
@@ -193,5 +195,23 @@ public class Main {
             a.add(random.nextInt(10) + 1);
         }
         queue.heapSort(a, 10);
+    }
+
+    public static void testDisjointSet() {
+        DisjointSet disjointSet = new DisjointSet(10);
+        for (int i = 0; i < 10; i++) {
+            disjointSet.makeSet(i);
+        }
+        disjointSet.union(1, 5);
+        disjointSet.union(0, 9);
+        disjointSet.union(5, 3);
+        disjointSet.union(6, 0);
+        disjointSet.union(9, 2);
+        disjointSet.union(1, 7);
+        for (int i = 0; i < 10; i++) {
+            System.out.println(i + ": " + disjointSet.find(i));
+        }
+        System.out.println();
+        System.out.println(disjointSet.toString());
     }
 }
