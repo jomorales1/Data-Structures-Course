@@ -1,62 +1,51 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include <bits/stdc++.h>
 
-using std::vector;
-using std::cin;
-using std::cout;
-
-class JobQueue {
- private:
-  int num_workers_;
-  vector<int> jobs_;
-
-  vector<int> assigned_workers_;
-  vector<long long> start_times_;
-
-  void WriteResponse() const {
-    for (int i = 0; i < jobs_.size(); ++i) {
-      cout << assigned_workers_[i] << " " << start_times_[i] << "\n";
-    }
-  }
-
-  void ReadData() {
-    int m;
-    cin >> num_workers_ >> m;
-    jobs_.resize(m);
-    for(int i = 0; i < m; ++i)
-      cin >> jobs_[i];
-  }
-
-  void AssignJobs() {
-    // TODO: replace this code with a faster algorithm.
-    assigned_workers_.resize(jobs_.size());
-    start_times_.resize(jobs_.size());
-    vector<long long> next_free_time(num_workers_, 0);
-    for (int i = 0; i < jobs_.size(); ++i) {
-      int duration = jobs_[i];
-      int next_worker = 0;
-      for (int j = 0; j < num_workers_; ++j) {
-        if (next_free_time[j] < next_free_time[next_worker])
-          next_worker = j;
-      }
-      assigned_workers_[i] = next_worker;
-      start_times_[i] = next_free_time[next_worker];
-      next_free_time[next_worker] += duration;
-    }
-  }
-
- public:
-  void Solve() {
-    ReadData();
-    AssignJobs();
-    WriteResponse();
-  }
-};
+using namespace std;
 
 int main() {
-  std::ios_base::sync_with_stdio(false);
-  JobQueue job_queue;
-  job_queue.Solve();
-  return 0;
+    int n = 0, m = 0;
+    cin >> n >> m;
+    queue<uint_fast64_t> tasks;
+    uint_fast64_t time;
+    for (int i = 0; i < m; i++) {
+        cin >> time;
+        tasks.push(time);
+    }
+    priority_queue<int, vector<int>, greater<int>> threads;
+    for (int i = 0; i < n; i++) {
+        threads.push(i);
+    }
+    priority_queue<pair<uint_fast64_t, int>, vector<pair<uint_fast64_t, int>>, greater<pair<uint_fast64_t, int>>> events;
+    uint_fast64_t current_time = 0;
+    while (!tasks.empty()) {
+        if (events.empty()) {
+            int limit = min((int) threads.size(), (int) tasks.size());
+            for (int i = 0; i < limit; i++) {
+                cout << threads.top() << ' ' << current_time << '\n';
+                uint_fast64_t new_time = current_time + tasks.front();
+                events.push({new_time, threads.top()});
+                tasks.pop(); threads.pop();
+            }
+        } else {
+            pair<uint_fast64_t, int> event = events.top();
+            threads.push(event.second);
+            events.pop();
+            current_time = (uint_fast64_t) event.first;
+            if (!events.empty()) {
+                while (events.top().first == current_time) {
+                    threads.push(events.top().second);
+                    events.pop();
+                    if (events.empty()) break;
+                }
+            }
+            int limit = min((int) threads.size(), (int) tasks.size());
+            for (int i = 0; i < limit; i++) {
+                cout << threads.top() << ' ' << current_time << '\n';
+                uint_fast64_t new_time = current_time + tasks.front();
+                events.push({new_time, threads.top()});
+                tasks.pop(); threads.pop();
+            }
+        }
+    }
+    return 0;
 }
