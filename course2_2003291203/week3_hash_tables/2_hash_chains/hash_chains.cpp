@@ -1,81 +1,87 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
+#include <bits/stdc++.h>
 
-using std::string;
-using std::vector;
-using std::cin;
+using namespace std;
 
-struct Query {
-    string type, s;
-    size_t ind;
-};
-
-class QueryProcessor {
-    int bucket_count;
-    // store all strings in one vector
-    vector<string> elems;
-    size_t hash_func(const string& s) const {
-        static const size_t multiplier = 263;
-        static const size_t prime = 1000000007;
-        unsigned long long hash = 0;
-        for (int i = static_cast<int> (s.size()) - 1; i >= 0; --i)
-            hash = (hash * multiplier + s[i]) % prime;
-        return hash % bucket_count;
-    }
-
-public:
-    explicit QueryProcessor(int bucket_count): bucket_count(bucket_count) {}
-
-    Query readQuery() const {
-        Query query;
-        cin >> query.type;
-        if (query.type != "check")
-            cin >> query.s;
-        else
-            cin >> query.ind;
-        return query;
-    }
-
-    void writeSearchResult(bool was_found) const {
-        std::cout << (was_found ? "yes\n" : "no\n");
-    }
-
-    void processQuery(const Query& query) {
-        if (query.type == "check") {
-            // use reverse order, because we append strings to the end
-            for (int i = static_cast<int>(elems.size()) - 1; i >= 0; --i)
-                if (hash_func(elems[i]) == query.ind)
-                    std::cout << elems[i] << " ";
-            std::cout << "\n";
-        } else {
-            vector<string>::iterator it = std::find(elems.begin(), elems.end(), query.s);
-            if (query.type == "find")
-                writeSearchResult(it != elems.end());
-            else if (query.type == "add") {
-                if (it == elems.end())
-                    elems.push_back(query.s);
-            } else if (query.type == "del") {
-                if (it != elems.end())
-                    elems.erase(it);
-            }
+class hash_table_t {
+    public:
+        hash_table_t(int m) {
+            this->buckets = m;
+            this->table = new vector<string>[m];
         }
-    }
-
-    void processQueries() {
-        int n;
-        cin >> n;
-        for (int i = 0; i < n; ++i)
-            processQuery(readQuery());
-    }
+        void add(const string &s) {
+            size_t hash = hash_code(s);
+            bool found = false;
+            for (string a : this->table[hash]) {
+                if (a == s) {
+                    found = true; break;
+                }
+            }
+            if (!found) this->table[hash].push_back(s);
+        }
+        void erase(const string &s) {
+            size_t hash = hash_code(s);
+            int pos = -1;
+            int n = (int) this->table[hash].size();
+            for (int i = 0; i < n; i++) {
+                if (this->table[hash][i] == s) {
+                    pos = i; break;
+                }
+            }
+            if (pos != -1) this->table[hash].erase(this->table[hash].begin() + pos);
+        }
+        bool find(const string &s) {
+            size_t hash = hash_code(s);
+            for (string a : this->table[hash]) {
+                if (a == s) return true;
+            }
+            return false;
+        }
+        void check(int index) {
+            int n = (int) this->table[index].size();
+            for (int i = n - 1; i >= 0; i--) {
+                cout << this->table[index][i] << ' ';
+            }
+            cout << '\n';
+        }
+    private:
+        int buckets;
+        vector<string>* table;
+        size_t hash_code(const string &s) {
+            unsigned long long hash = 0LL;
+            static const size_t multiplier = 263;
+            static const size_t prime = 1000000007;
+            int n = (int) s.length();
+            for (int i = n - 1; i >= 0; i--) {
+                int as = s[i];
+                hash = (hash * multiplier + as) % prime;
+            }
+            return hash % this->buckets;
+        }
 };
 
 int main() {
-    std::ios_base::sync_with_stdio(false);
-    int bucket_count;
-    cin >> bucket_count;
-    QueryProcessor proc(bucket_count);
-    proc.processQueries();
+    // freopen("input.txt", "r", stdin);
+    // freopen("output.txt", "w", stdout);
+    int m = 0; cin >> m;
+    hash_table_t ht(m);
+    int n = 0; cin >> n;
+    for (int i = 0; i < n; i++) {
+        string action; cin >> action;
+        if (action == "add") {
+            string s; cin >> s;
+            ht.add(s);
+        } else if (action == "del") {
+            string s; cin >> s;
+            ht.erase(s);
+        } else if (action == "find") {
+            string s; cin >> s;
+            bool res = ht.find(s);
+            if (res) cout << "yes\n";
+            else cout << "no\n";
+        } else {
+            int index; cin >> index;
+            ht.check(index);
+        }
+    }
     return 0;
 }
